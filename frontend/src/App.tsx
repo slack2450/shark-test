@@ -44,7 +44,7 @@ function App() {
         <ModeToggle />
       </div>
 
-      <div className="flex space-x-2 max-w-md m-auto mb-2 ml-2 mr-2">
+      <div className="flex space-x-2 max-w-md m-auto mb-2 pl-2 pr-2">
 
         <Input className='text-1xl' onChange={(e) => setPacksToFetch(e.target.value)} type='text' placeholder='Number of packs' />
         <Button className='text-1xl' onClick={() => fetchPacks()}>
