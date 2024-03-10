@@ -46,13 +46,13 @@ function App() {
 
       <div className="flex space-x-2 max-w-md m-auto mb-2 pl-2 pr-2">
 
-        <Input className='text-1xl' onChange={(e) => setPacksToFetch(e.target.value)} type='text' placeholder='Number of packs' />
+        <Input className='text-1xl' onChange={(e) => setPacksToFetch(e.target.value)} type='text' placeholder='Number of items' />
         <Button className='text-1xl' onClick={() => fetchPacks()}>
           Go
         </Button>
       </div>
       <p className="text-1xl text-slate-400 mb-4 text-center">
-        Enter the number of packs you want to order and click Go.
+        Enter the number of items you want to order and click Go.
       </p>
       
       <div className='ml-2 mr-2'>
