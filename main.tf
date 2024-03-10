@@ -16,7 +16,7 @@ terraform {
       name = "shark-test"
     }
   }
-  
+
 }
 
 variable "aws_access_key" {
