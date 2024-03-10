@@ -12,11 +12,14 @@ import { motion } from 'framer-motion'
 
 function App() {
 
+  // Keep track of the number of packs to fetch
   const [packsToFetch, setPacksToFetch] = useState<string>('');
   const [packs, setPacks] = useState<Record<string, string>>({});
 
   const { toast } = useToast()
 
+  // Fetch the packs from the server and update the state
+  // with the response. If an error occurs, display a toast
   function fetchPacks() {
     setPacks({})
     axios.get(`/api/packs/${packsToFetch}`)
@@ -36,12 +39,12 @@ function App() {
   return (
     <>
       <img src={sharkLogo} className='mt-6 max-w-24 m-auto dark:invert' alt="GymShark Logo" />
-      <div className="flex space-x-2 m-auto justify-center">
+      <div className="flex space-x-2 m-auto justify-center ">
         <h1 className='text-4xl font-bold mb-2'>Package Shark</h1>
         <ModeToggle />
       </div>
 
-      <div className="flex space-x-2 max-w-md m-auto mb-2">
+      <div className="flex space-x-2 max-w-md m-auto mb-2 ml-2 mr-2">
 
         <Input className='text-1xl' onChange={(e) => setPacksToFetch(e.target.value)} type='text' placeholder='Number of packs' />
         <Button className='text-1xl' onClick={() => fetchPacks()}>
@@ -51,11 +54,14 @@ function App() {
       <p className="text-1xl text-slate-400 mb-4 text-center">
         Enter the number of packs you want to order and click Go.
       </p>
-
-      <div>
-        {Object.entries(packs).sort((a, b) => parseInt(b[0]) - parseInt(a[0])).map(([packSize, quantity], index) => (
-          <Pack packSize={packSize} quantity={quantity} index={index} />
-        ))}
+      
+      <div className='ml-2 mr-2'>
+        {
+          // Render the packs as cards, sorted by pack size descending
+          Object.entries(packs).sort((a, b) => parseInt(b[0]) - parseInt(a[0])).map(([packSize, quantity], index) => (
+            <Pack packSize={packSize} quantity={quantity} index={index} />
+          ))
+        }
       </div>
     </>
   )
