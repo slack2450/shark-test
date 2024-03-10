@@ -10,13 +10,13 @@ terraform {
     }
   }
 
-  cloud {
+  backend "remote" {
     organization = "shark-test"
-
     workspaces {
       name = "shark-test"
     }
   }
+  
 }
 
 variable "aws_access_key" {
