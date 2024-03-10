@@ -46,7 +46,7 @@ resource "null_resource" "function_binary" {
   }
 
   triggers = {
-    when_file_changes = sha256(file("${path.module}/main.go"))
+    always_run = "${timestamp()}"
   }
 }
 

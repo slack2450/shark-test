@@ -10,6 +10,8 @@ import axios from 'axios'
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 
+axios.defaults.baseURL = 'https://api.shark.plasam.dev/v1'
+
 function App() {
 
   // Keep track of the number of packs to fetch
@@ -22,7 +24,7 @@ function App() {
   // with the response. If an error occurs, display a toast
   function fetchPacks() {
     setPacks({})
-    axios.get(`/api/packs/${packsToFetch}`)
+    axios.get(`/packs/${packsToFetch}`)
       .then(response => {
         setPacks(response.data)
         console.log(response.data)
