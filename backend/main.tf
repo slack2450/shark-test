@@ -42,7 +42,7 @@ data "aws_caller_identity" "current" {}
 
 resource "null_resource" "function_binary" {
   provisioner "local-exec" {
-    command = "GOOS=linux GOARCH=arm64 CGO_ENABLED=0 GOFLAGS=-trimpath go build -C ${abspath(path.module)} -mod=readonly -ldflags='-s -w' -o bootstrap"
+    command = "GOOS=linux GOARCH=arm64 CGO_ENABLED=0 GOFLAGS=-trimpath /usr/bin/go build -C ${abspath(path.module)} -mod=readonly -ldflags='-s -w' -o bootstrap"
   }
 
   triggers = {
