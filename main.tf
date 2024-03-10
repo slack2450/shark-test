@@ -32,7 +32,7 @@ variable "cloudflare_api_token" {
 }
 
 provider "aws" {
-  region = "eu-west-2"
+  region     = "eu-west-2"
   access_key = var.aws_access_key
   secret_key = var.aws_secret_key
 }
@@ -45,13 +45,13 @@ provider "aws" {
 }
 
 module "api" {
-  source = "./backend"
-  aws_access_key = var.aws_access_key
-  aws_secret_key = var.aws_secret_key
+  source               = "./backend"
+  aws_access_key       = var.aws_access_key
+  aws_secret_key       = var.aws_secret_key
   cloudflare_api_token = var.cloudflare_api_token
 }
 
 module "frontend" {
-  source = "./frontend"
+  source               = "./frontend"
   cloudflare_api_token = var.cloudflare_api_token
 }
