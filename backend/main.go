@@ -1,100 +1,58 @@
 package main
 
 import (
-	"encoding/json"
-	"io"
-	"net/http"
-	"os"
-	"slices"
-	"sort"
+	"context"
 	"strconv"
 
-	"github.com/gin-contrib/cors"
-	"github.com/gin-gonic/gin"
+	"github.com/aws/aws-lambda-go/events"
+	"github.com/aws/aws-lambda-go/lambda"
 )
 
 // Create a global variable to store the packs
-var packs []int
-
-func init() {
-	// Dynamically load packs from json file
-	jsonFile, err := os.Open("packs.json")
-
-	// Panic if pack file is not found / cannot be opened
-	if err != nil {
-		panic(err)
-	}
-
-	// Read the json file
-	byteValue, _ := io.ReadAll(jsonFile)
-
-	// Close the file
-	jsonFile.Close()
-
-	// Unmarshal the json into a slice of ints
-	json.Unmarshal(byteValue, &packs)
-
-	// Check length of packs is greater than 0
-	if len(packs) == 0 {
-		panic("No packs found")
-	}
-
-	// Sort the packs
-	sort.Ints(packs[:])
-	// Remove duplicates
-	packs = slices.Compact[[]int, int](packs)
-
-	println("Packs loaded")
+var packs = []uint64{
+	250,
+	500,
+	1000,
+	2000,
+	5000,
 }
 
-func getPacks(c *gin.Context) {
-	count, err := strconv.Atoi(c.Param("count"))
+func HandleRequest(ctx context.Context, request events.APIGatewayV2HTTPRequest) (map[uint64]uint64, error) {
+	// Use a greedy algorithm to solve this problem
+	// We start with the largest pack and mod the count by the pack size
+	// This will give us the remainder
+	// We will then move to the next pack size and repeat the process
+	count, err := strconv.ParseUint(request.PathParameters["count"], 10, 64)
 
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"message": "Invalid count",
-		})
-		return
+		return nil, err
 	}
-
-	// Use a greedy algorithm to solve this problem
-	// We start with the largest pack and keep subtracting the pack size from the count until we reach 0
-	// We will then move to the next pack size and repeat the process
 
 	// Round count up to the smallest pack size
 	// This is to ensure that we don't send more items than necessary to fulfill the order
 	count = (count + packs[0] - 1) / packs[0] * packs[0]
 
 	// We will keep track of the number of packs of each size we use
-	packCounts := make(map[int]int)
+	packCounts := make(map[uint64]uint64)
 
 	// We will start with the largest pack
 	for i := len(packs) - 1; i >= 0; i-- {
 		pack := packs[i]
-		// We will keep subtracting the pack size from the count until we reach 0
-		for count >= pack {
-			count -= pack
-			packCounts[pack]++
+		// Divide the count by the pack size
+		// This will give us the number of packs of the current size that we need
+		// Only add the pack count to the map if it is greater than 0
+		packCount := count / pack
+		if packCount > 0 {
+			packCounts[pack] = packCount
 		}
+		// Mod the count by the pack size to get the remainder
+		count = count % pack
 	}
 
 	// Return the pack counts
-	c.JSON(http.StatusOK, packCounts)
+	return packCounts, nil
 }
 
 func main() {
-
-	// Create a new router
-	router := gin.Default()
-
-	// Add CORS middleware to allow localhost:5173 to access the server
-	config := cors.DefaultConfig()
-	config.AllowOrigins = []string{"http://localhost:5173"}
-	router.Use(cors.New(config))
-
-	// Add a route to get the packs
-	router.GET("/packs/:count", getPacks)
-
-	// Run the server on port 8080
-	router.Run(":8080")
+	lambda.Start(HandleRequest)
 }
