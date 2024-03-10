@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
 import { ModeToggle } from '@/components/mode-toggle'
+import { useToast } from "@/components/ui/use-toast"
 
 import axios from 'axios'
 import { useState } from 'react'
@@ -14,12 +15,21 @@ function App() {
   const [packsToFetch, setPacksToFetch] = useState<string>('');
   const [packs, setPacks] = useState<Record<string, string>>({});
 
+  const { toast } = useToast()
+
   function fetchPacks() {
     setPacks({})
     axios.get(`/api/packs/${packsToFetch}`)
       .then(response => {
         setPacks(response.data)
         console.log(response.data)
+      })
+      .catch(error => {
+        console.error(error)
+        toast({
+          variant: 'destructive',
+          title: 'An error occurred while fetching packs'
+        })
       })
   }
 
