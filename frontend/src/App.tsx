@@ -43,8 +43,8 @@ function App() {
 
       <div className="flex space-x-2 max-w-md m-auto mb-2">
 
-        <Input onChange={(e) => setPacksToFetch(e.target.value)} type='text' placeholder='Number of packs' />
-        <Button onClick={() => fetchPacks()}>
+        <Input className='text-1xl' onChange={(e) => setPacksToFetch(e.target.value)} type='text' placeholder='Number of packs' />
+        <Button className='text-1xl' onClick={() => fetchPacks()}>
           Go
         </Button>
       </div>
