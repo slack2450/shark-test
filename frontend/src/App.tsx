@@ -59,7 +59,7 @@ function App() {
       <div className="flex space-x-2 max-w-md m-auto mb-3 pl-2 pr-2">
         <Input
           className="text-1xl"
-          onChange={(e) => setPacksToFetch(Math.max(parseInt(e.target.value) || 0), 0)}
+          onChange={(e) => setPacksToFetch(Math.max(parseInt(e.target.value) || 0, 0))}
           value={packsToFetch}
           type="text"
           placeholder="Number of items"
