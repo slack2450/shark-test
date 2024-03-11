@@ -35,14 +35,3 @@ resource "cloudflare_pages_project" "build_config" {
     }
   }
 }
-
-resource "null_resource" "deploy" {
-  triggers = {
-    always_run = "${timestamp()}"
-  }
-
-  provisioner "local-exec" {
-    command = "curl -X POST https://api.cloudflare.com/client/v4/pages/webhooks/deploy_hooks/0472fea3-f31e-4e42-8043-7d3d594c3f99"
-  }
-
-}

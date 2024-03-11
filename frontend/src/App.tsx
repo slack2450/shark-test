@@ -75,8 +75,7 @@ function App() {
       <div className="flex space-x-2 m-auto max-w-md justify-evenly mb-2 pl-1">
         <Button onClick={() => setPacksToFetch(Math.max(packsToFetch-1000,0))}>-1000</Button>
         <Button onClick={() => setPacksToFetch(Math.max(packsToFetch-100,0))}>-100</Button>
-        <Button onClick={() => setPacksToFetch(Math.max(packsToFetch-10,0))}>-10</Button>
-        <Button onClick={() => setPacksToFetch(Math.max(packsToFetch+10,0))}>+10</Button>
+        <Button onClick={() => setPacksToFetch(0)}>Reset</Button>
         <Button onClick={() => setPacksToFetch(Math.max(packsToFetch+100,0))}>+100</Button>
         <Button onClick={() => setPacksToFetch(Math.max(packsToFetch+1000,0))}>+1000</Button>
       </div>
